@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Robocopy Quick Guide</title>
+  <style>
+    :root { --ink: #1a1a1a; --muted: #444; --rule: #ccc; --code-bg: #f4f4f4; }
+    * { box-sizing: border-box; }
+    body {
+      font-family: "Segoe UI", Calibri, Arial, sans-serif;
+      color: var(--ink); line-height: 1.35;
+      max-width: 7.5in; margin: 0.5in auto; padding: 0 0.35in; font-size: 10.5pt;
+    }
+    h1 {
+      font-size: 17pt; margin: 0 0 0.08in;
+      border-bottom: 2px solid var(--ink); padding-bottom: 0.08in;
+    }
+    .tagline { font-size: 11pt; color: var(--muted); margin: 0 0 0.2in; font-weight: 600; }
+    h2 { font-size: 12pt; margin: 0.22in 0 0.06in; }
+    p { margin: 0 0 0.1in; }
+    ul { margin: 0.04in 0 0.12in; padding-left: 0.28in; }
+    li { margin-bottom: 0.03in; }
+    code, pre { font-family: Consolas, "Courier New", monospace; font-size: 9pt; }
+    code { background: var(--code-bg); padding: 0 0.1em; }
+    pre {
+      background: var(--code-bg); border: 1px solid var(--rule);
+      padding: 0.1in 0.12in; margin: 0.06in 0 0.12in; white-space: pre-wrap; word-break: break-all;
+    }
+    table { width: 100%; border-collapse: collapse; margin: 0.06in 0 0.12in; font-size: 9.5pt; }
+    th, td { border: 1px solid var(--rule); padding: 0.04in 0.07in; text-align: left; vertical-align: top; }
+    th { background: #eee; }
+    .box {
+      border: 1px solid var(--ink); padding: 0.1in 0.12in; margin: 0.1in 0 0.14in;
+      background: #fafafa;
+    }
+    .box strong { display: block; margin-bottom: 0.04in; }
+    footer {
+      margin-top: 0.22in; padding-top: 0.08in; border-top: 1px solid var(--rule);
+      font-size: 8.5pt; color: var(--muted);
+    }
+    @media print {
+      body { margin: 0.35in; max-width: none; }
+      .box, pre, table { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <h1>Robocopy Quick Guide</h1>
+  <p class="tagline">Much faster than File Explorer for large folder copies and backups.</p>
+
+  <h2>Robo Copy / Robo Paste (Explorer)</h2>
+  <div class="box">
+    <strong>Installed for your Windows user account</strong>
+    <ol style="margin:0.04in 0 0; padding-left:0.28in;">
+      <li>Right-click a <strong>folder</strong> → <strong>Robo Copy</strong></li>
+      <li>Go to the destination → right-click the folder (or empty space inside it) → <strong>Robo Paste</strong></li>
+      <li>Confirm → robocopy runs with multi-thread (<code>/MT:8</code>)</li>
+    </ol>
+  </div>
+  <p>
+    Scripts live in <code>%LOCALAPPDATA%\RoboClipboard\</code>.
+    Reinstall: run <code>Install-RoboClipboard.ps1</code> there.
+  </p>
+
+  <h2>What robocopy is</h2>
+  <p>
+    <strong>Robocopy</strong> (Robust File Copy) is a built-in Windows command-line tool.
+    It handles huge folder trees better than Explorer: multi-threaded copy, retries,
+    skip unchanged files, and a clear summary. Use Explorer for a few small files;
+    use robocopy (or Robo Copy/Paste) for backups and multi-GB trees.
+  </p>
+
+  <h2>Command line</h2>
+  <pre>robocopy "C:\path\to\source" "D:\path\to\destination" /E /COPY:DAT /R:1 /W:1 /MT:8</pre>
+
+  <h2>Useful switches</h2>
+  <table>
+    <thead><tr><th>Switch</th><th>Meaning</th></tr></thead>
+    <tbody>
+      <tr><td><code>/E</code></td><td>All subfolders (including empty)</td></tr>
+      <tr><td><code>/MT:8</code></td><td>8 threads — usually much faster</td></tr>
+      <tr><td><code>/COPY:DAT</code></td><td>Data + attributes + timestamps</td></tr>
+      <tr><td><code>/R:1 /W:1</code></td><td>1 retry, 1 second wait</td></tr>
+      <tr><td><code>/XO</code></td><td>Skip older destination files</td></tr>
+      <tr><td><code>/MIR</code></td><td>Mirror (also <strong>deletes</strong> extras in dest — careful)</td></tr>
+      <tr><td><code>/L</code></td><td>Dry run — list only</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Exit codes</h2>
+  <p><strong>0–7</strong> = success (including “nothing new”). <strong>8+</strong> = failure.</p>
+
+  <h2>Why not Explorer?</h2>
+  <ul>
+    <li>Explorer often stalls or fails on huge / locked trees</li>
+    <li>Robocopy retries and skips files already up to date</li>
+    <li>Multi-thread (<code>/MT</code>) is typically much faster</li>
+    <li>You get a clear summary instead of a silent hang</li>
+  </ul>
+
+  <footer>
+    Open this file → Ctrl+P to print · Desktop: Robocopy Quick Guide.html
+  </footer>
+</body>
+</html>
